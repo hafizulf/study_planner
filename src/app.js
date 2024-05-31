@@ -1,13 +1,14 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 const errorHandler = require('./middleware/errorHandler');
 
-var indexRouter = require('./routes/index');
-var studentsRouter = require('./routes/student.routes');
+const indexRouter = require('./routes/index');
+const studentsRouter = require('./routes/student.routes');
+const subjectsRouter = require('./routes/subject.routes');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/students', studentsRouter);
+app.use('/subjects', subjectsRouter);
 
 app.use(errorHandler);
 
