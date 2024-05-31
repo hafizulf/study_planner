@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+const { Student } = require('../models/student');
+const { Subject } = require('../models/subject');
+
 module.exports = (sequelize, DataTypes) => {
   class StudyPlan extends Model {
     /**
@@ -28,22 +31,31 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
       },
-      studentId: {
+      student_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Student',
+          model: Student,
           key: 'id',
         },
         allowNull: false,
       },
-      subjectId: {
+      subject_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Subject',
+          model: Subject,
           key: 'id',
         },
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      deletedAt: DataTypes.DATE,
     },
     {
       sequelize,
