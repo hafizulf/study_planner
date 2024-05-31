@@ -9,6 +9,7 @@ const errorHandler = require('./middleware/errorHandler');
 const indexRouter = require('./routes/index');
 const studentsRouter = require('./routes/student.routes');
 const subjectsRouter = require('./routes/subject.routes');
+const studyPlansRouter = require('./routes/study-plan.routes');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/students', studentsRouter);
 app.use('/subjects', subjectsRouter);
+app.use('/study-plans', studyPlansRouter);
 
 app.use(errorHandler);
 
