@@ -20,9 +20,15 @@ const update = async (props) => {
   return result;
 }
 
+const destroy = async (id) => {
+  const result = await repository.destroy(id);
+  return result;
+}
+
 module.exports = {
   findAll,
   store,
   findById,
   update,
+  destroy,
 }

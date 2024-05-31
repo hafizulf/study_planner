@@ -4,7 +4,8 @@ const controller = require('../controllers/student.controllers');
 const {
   createStudentValidator,
   getStudentValidator ,
-  updateStudentValidator ,
+  updateStudentValidator,
+  deleteStudentValidator,
 } = require('../validators/student.validation');
 const validate = require('../middleware/validate');
 
@@ -30,6 +31,12 @@ router
     updateStudentValidator,
     validate,
     controller.update,
+  )
+  .delete(
+    '/:id',
+    deleteStudentValidator,
+    validate,
+    controller.destroy,
   )
 
 module.exports = router;

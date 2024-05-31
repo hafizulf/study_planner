@@ -37,10 +37,19 @@ const update = async (props) => {
   return student.update(props);
 }
 
+const destroy = async (id) => {
+  const student = await Student.findByPk(id);
+  if (!student) {
+    throw new NotFoundError('Student not found!');
+  }
+  return student.destroy();
+}
+
 module.exports = {
   findAll,
   store,
   findById,
   NotFoundError,
   update,
+  destroy,
 }

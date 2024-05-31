@@ -28,8 +28,11 @@ const updateStudentValidator = [
     .withMessage('Name must be a string'),
 ];
 
+const deleteStudentValidator = getStudentValidator;
+
 module.exports = {
   createStudentValidator,
   getStudentValidator,
   updateStudentValidator,
+  deleteStudentValidator,
 };
