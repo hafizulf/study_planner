@@ -34,8 +34,27 @@ const findById = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  try {
+    const props = {
+      ...req.params,
+      ...req.body
+    };
+    const data = await service.update(props);
+    return res
+      .status(200)
+      .json({
+        message: 'Student updated successfully',
+        data,
+      })
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   findAll,
   store,
   findById,
+  update,
 }

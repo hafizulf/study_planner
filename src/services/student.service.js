@@ -15,8 +15,14 @@ const findById = async (id) => {
   return result;
 }
 
+const update = async (props) => {
+  const result = await repository.update(props);
+  return result;
+}
+
 module.exports = {
   findAll,
   store,
   findById,
+  update,
 }

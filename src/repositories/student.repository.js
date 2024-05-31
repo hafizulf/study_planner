@@ -27,9 +27,20 @@ const findById = async (id) => {
   return data;
 }
 
+const update = async (props) => {
+  const student = await Student.findByPk(props.id);
+
+  if (!student) {
+    throw new NotFoundError('Student not found!');
+  }
+
+  return student.update(props);
+}
+
 module.exports = {
   findAll,
   store,
   findById,
   NotFoundError,
+  update,
 }

@@ -16,7 +16,20 @@ const getStudentValidator = [
     .withMessage('Id must be an integer'),
 ];
 
+const updateStudentValidator = [
+  param('id')
+    .notEmpty()
+    .withMessage('Id is required')
+    .isInt()
+    .withMessage('Id must be an integer'),
+  body('name')
+    .optional()
+    .isString()
+    .withMessage('Name must be a string'),
+];
+
 module.exports = {
   createStudentValidator,
   getStudentValidator,
+  updateStudentValidator,
 };

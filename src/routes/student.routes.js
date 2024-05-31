@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const controller = require('../controllers/student.controllers');
-const { createStudentValidator, getStudentValidator } = require('../validators/student.validation');
+const {
+  createStudentValidator,
+  getStudentValidator ,
+  updateStudentValidator ,
+} = require('../validators/student.validation');
 const validate = require('../middleware/validate');
 
 router
@@ -20,6 +24,12 @@ router
     getStudentValidator,
     validate,
     controller.findById,
+  )
+  .put(
+    '/:id',
+    updateStudentValidator,
+    validate,
+    controller.update,
   )
 
 module.exports = router;
