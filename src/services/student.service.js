@@ -10,7 +10,13 @@ const store = async (props) => {
   return result;
 }
 
+const findById = async (id) => {
+  const result = await repository.findById(id);
+  return result;
+}
+
 module.exports = {
   findAll,
   store,
+  findById,
 }

@@ -20,7 +20,22 @@ const store = async (req, res) => {
     })
 }
 
+const findById = async (req, res, next) => {
+  try {
+    const data = await service.findById(req.params.id);
+    return res
+      .status(200)
+      .json({
+        message: 'Student fetched successfully',
+        data,
+      })
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   findAll,
   store,
+  findById,
 }
