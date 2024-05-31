@@ -1,17 +1,16 @@
 const { Student } = require('../models');
 
-console.log('Student model:', Student);  // Debug line
-
 const findAll = async () => {
-  if (!Student) {
-    throw new Error('Student model is not defined');
-  }
-
   const data = await Student.findAll();
-  console.log(data);
   return data;
 };
 
+const store = async (props) => {
+  const createdStudent = await Student.create(props);
+  return createdStudent;
+}
+
 module.exports = {
   findAll,
+  store,
 }

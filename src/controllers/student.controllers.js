@@ -10,6 +10,17 @@ const findAll = async (req, res) => {
     });
 };
 
+const store = async (req, res) => {
+  const data = await service.store(req.body);
+  return res
+    .status(201)
+    .json({
+      message: 'Student created successfully',
+      data,
+    })
+}
+
 module.exports = {
   findAll,
+  store,
 }
