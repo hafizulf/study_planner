@@ -11,25 +11,46 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      StudyPlan.belongsTo(models.Student, {
-        foreignKey: 'studentId',
-        as: 'student'
-      });
-      StudyPlan.belongsTo(models.Subject, {
-        foreignKey: 'subjectId',
-        as: 'subject'
-      });
+      // StudyPlan.belongsTo(models.Student, {
+      //   foreignKey: 'studentId',
+      //   as: 'student'
+      // });
+      // StudyPlan.belongsTo(models.Subject, {
+      //   foreignKey: 'subjectId',
+      //   as: 'subject'
+      // });
     }
   }
-  StudyPlan.init({
-    id: DataTypes.INTEGER,
-    studentId: DataTypes.INTEGER,
-    subjectId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'study_plan',
-    tableName: 'study_plans',
-    underscored: true,
-  });
+  StudyPlan.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+      },
+      studentId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Student',
+          key: 'id'
+        },
+        allowNull: false,
+      },
+      subjectId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Subject',
+          key: 'id'
+        },
+        allowNull: false,
+      }
+    },
+    {
+      sequelize,
+      modelName: 'StudyPlan',
+      tableName: 'study_plans',
+      underscored: true,
+    }
+  );
   return StudyPlan;
 };

@@ -29,11 +29,13 @@ fs.readdirSync(__dirname)
       sequelize,
       Sequelize.DataTypes
     );
+    console.log('Loading model:', model.name); // Debug line
     db[model.name] = model;
   });
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
+    console.log('Associating model:', modelName); // Debug line
     db[modelName].associate(db);
   }
 });

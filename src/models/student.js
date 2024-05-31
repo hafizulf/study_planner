@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Student.hasMany(models.StudyPlan, {
         foreignKey: 'studentId',
-        as: 'study_plan'
+        as: 'studyPlan'
       });
     }
   }
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'student',
+      modelName: 'Student',
       tableName: 'students',
       underscored: true,
     }
