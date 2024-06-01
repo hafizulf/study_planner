@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // StudyPlan.belongsTo(models.Student, {
-      //   foreignKey: 'studentId',
-      //   as: 'student'
-      // });
-      // StudyPlan.belongsTo(models.Subject, {
-      //   foreignKey: 'subjectId',
-      //   as: 'subject'
-      // });
+      StudyPlan.belongsTo(models.Student, {
+        foreignKey: 'studentId',
+        as: 'student'
+      });
+      StudyPlan.belongsTo(models.Subject, {
+        foreignKey: 'subjectId',
+        as: 'subject'
+      });
     }
   }
   StudyPlan.init(

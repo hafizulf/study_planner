@@ -1,13 +1,43 @@
-const { StudyPlan, Sequelize } = require('../models');
+const {
+  StudyPlan,
+  Subject,
+  Student,
+} = require('../models');
 const NotFoundError = require('../exceptions/NotFoundError');
 
 const findAll = async () => {
-  const data = await StudyPlan.findAll();
+  const data = await StudyPlan.findAll({
+    include: [
+      {
+        model: Subject,
+        as: 'subject',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: Student,
+        as: 'student',
+        attributes: ['id', 'name'],
+      },
+    ],
+  });
   return data;
 };
 
 const findById = async (id) => {
-  const data = await StudyPlan.findByPk(id);
+  const data = await StudyPlan.findByPk(id, {
+    include: [
+      {
+        model: Subject,
+        as: 'subject',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: Student,
+        as: 'student',
+        attributes: ['id', 'name'],
+      },
+    ],
+  })
 
   if (!data) {
     throw new NotFoundError('Study plan not found!');
@@ -49,7 +79,6 @@ const bulkUpsert = async (props) => {
 module.exports = {
   findAll,
   findById,
-  // NotFoundError,
   destroy,
   findAllBySubjectId,
   bulkUpsert,

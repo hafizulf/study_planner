@@ -5,13 +5,43 @@ const BadRequestError = require('../exceptions/BadRequestError');
 const NotFoundError = require('../exceptions/NotFoundError');
 
 const findAll = async () => {
-  const data = await repository.findAll();
-  return data;
+  const result = await repository.findAll();
+
+  // Transform the data to group subjects by studentId
+  const groupedData = result.reduce((acc, item) => {
+    const { studentId, subject } = item;
+
+    if (!acc[studentId]) {
+      acc[studentId] = {
+        studentId: studentId,
+        name: item.student.name,
+        subjects: [],
+      };
+    }
+
+    acc[studentId].subjects.push({
+      id: subject.id,
+      name: subject.name,
+    });
+
+    return acc;
+  }, {});
+
+  // Convert the object to an array
+  const response = Object.values(groupedData);
+  return response;
 };
 
 const findById = async (id) => {
   const result = await repository.findById(id);
-  return result;
+
+  return {
+    id: result.id,
+    studentId: result.studentId,
+    studentName: result.student.name,
+    subjectId: result.subjectId,
+    subjectName: result.subject.name,
+  };
 };
 
 const destroy = async (id) => {
