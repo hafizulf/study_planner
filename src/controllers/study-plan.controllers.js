@@ -8,9 +8,21 @@ const findAll = async (req, res) => {
   });
 };
 
+const findByStudentId = async (req, res, next) => {
+  try {
+    const data = await service.findAllByStudentId(req.params.studentId);
+    return res.status(200).json({
+      message: 'Study plan students fetched successfully',
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const findById = async (req, res, next) => {
   try {
-    const data = await service.findAllById(req.params.studentId);
+    const data = await service.findById(req.params.id);
     return res.status(200).json({
       message: 'Study plan fetched successfully',
       data,
@@ -45,6 +57,7 @@ const store = async (req, res, next) => {
 
 module.exports = {
   findAll,
+  findByStudentId,
   findById,
   destroy,
   store,

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/study-plan.controllers');
 const {
+  getStudyPlanByStudentValidator,
   getStudyPlanValidator,
   deleteStudyPlanValidator,
 } = require('../validators/study-plan.validation');
@@ -10,8 +11,14 @@ const { createStudyPlanValidator } = require('../validators/study-plan.validatio
 
 router
   .get('/', controller.findAll)
-  .get('/:studentId', getStudyPlanValidator, validate, controller.findById)
+  .get(
+    '/students/:studentId',
+    getStudyPlanByStudentValidator,
+    validate,
+    controller.findByStudentId
+  )
+  .get('/:id', getStudyPlanValidator, validate, controller.findById)
   .delete('/:id', deleteStudyPlanValidator, validate, controller.destroy)
-  .post('/', createStudyPlanValidator, validate, controller.store)
+  .post('/', createStudyPlanValidator, validate, controller.store);
 
 module.exports = router;

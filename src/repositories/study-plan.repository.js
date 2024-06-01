@@ -23,7 +23,7 @@ const findAll = async () => {
   return data;
 };
 
-const findById = async (studentId) => {
+const findAllByStudentId = async (studentId) => {
   const data = await StudyPlan.findAll({
     where: {
       studentId,
@@ -46,6 +46,16 @@ const findById = async (studentId) => {
     throw new NotFoundError('Study plan not found!');
   }
 
+  return data;
+};
+
+const findById = async (id) => {
+  const data = await StudyPlan.findByPk(id, {
+    attributes: ['id', 'studentId', 'subjectId'],
+  });
+  if (!data) {
+    throw new NotFoundError('Study plan not found!');
+  }
   return data;
 };
 
@@ -81,6 +91,7 @@ const bulkUpsert = async (props) => {
 
 module.exports = {
   findAll,
+  findAllByStudentId,
   findById,
   destroy,
   findAllBySubjectId,

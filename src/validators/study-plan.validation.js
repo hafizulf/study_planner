@@ -1,11 +1,19 @@
 const { body, param } = require('express-validator');
 
-const getStudyPlanValidator = [
+const getStudyPlanByStudentValidator = [
   param('studentId')
     .notEmpty()
     .withMessage('Student id is required')
     .isInt()
     .withMessage('Student id must be an integer'),
+];
+
+const getStudyPlanValidator = [
+  param('id')
+    .notEmpty()
+    .withMessage('Id is required')
+    .isInt()
+    .withMessage('Id must be an integer'),
 ];
 
 const deleteStudyPlanValidator = getStudyPlanValidator;
@@ -29,8 +37,12 @@ const createStudyPlanValidator = [
     }),
 ];
 
+const updateStudyPlanValidator = createStudyPlanValidator;
+
 module.exports = {
+  getStudyPlanByStudentValidator,
   getStudyPlanValidator,
   deleteStudyPlanValidator,
   createStudyPlanValidator,
+  updateStudyPlanValidator,
 };
