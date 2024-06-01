@@ -1,11 +1,5 @@
-const { Subject } = require('../models');
-
-class NotFoundError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'NotFoundError';
-  }
-}
+const { Subject, Sequelize } = require('../models');
+const NotFoundError = require('../exceptions/NotFoundError');
 
 const findAll = async () => {
   const data = await Subject.findAll();
@@ -45,11 +39,22 @@ const destroy = async (id) => {
   return subject.destroy();
 };
 
+const findAllByIds = async (ids) => {
+  const data = await Subject.findAll({
+    where: {
+      id: {
+        [Sequelize.Op.in]: ids,
+      }
+    }
+  });
+  return data;
+};
+
 module.exports = {
   findAll,
   store,
   findById,
-  NotFoundError,
   update,
   destroy,
+  findAllByIds,
 };

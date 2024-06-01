@@ -7,6 +7,12 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  if (err.name === 'BadRequestError') {
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
+
   // Default to 500 server error
   res.status(500).json({
     message: 'An unexpected error occurred',

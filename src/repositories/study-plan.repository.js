@@ -1,11 +1,5 @@
-const { StudyPlan } = require('../models');
-
-class NotFoundError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'NotFoundError';
-  }
-}
+const { StudyPlan, Sequelize } = require('../models');
+const NotFoundError = require('../exceptions/NotFoundError');
 
 const findAll = async () => {
   const data = await StudyPlan.findAll();
@@ -30,9 +24,33 @@ const destroy = async (id) => {
   return studyPlan.destroy();
 };
 
+const findAllBySubjectId = async (id) => {
+  const data = await StudyPlan.findAll({
+    where: {
+      subject_id: id
+    }
+  });
+  return data;
+}
+
+const bulkUpsert = async (props) => {
+  const { studentId, subjectIds } = props;
+
+  const studyPlans = subjectIds.map((subjectId) => ({
+    studentId,
+    subjectId,
+  }));
+
+  for (const plan of studyPlans) {
+    await StudyPlan.upsert(plan);
+  }
+};
+
 module.exports = {
   findAll,
   findById,
-  NotFoundError,
+  // NotFoundError,
   destroy,
+  findAllBySubjectId,
+  bulkUpsert,
 };
