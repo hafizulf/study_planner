@@ -3,6 +3,7 @@ const studentRepository = require('../repositories/student.repository');
 const subjectRepository = require('../repositories/subject.repository');
 const BadRequestError = require('../exceptions/BadRequestError');
 const NotFoundError = require('../exceptions/NotFoundError');
+const { sequelize } = require('../models');
 
 const findAll = async () => {
   const result = await repository.findAll();
@@ -61,11 +62,13 @@ const destroy = async (id) => {
 
 const store = async (props) => {
   const { studentId, subjectIds } = props;
-
   await studentRepository.findById(studentId);
 
-  if (subjectIds.length > 3) {
-    throw new BadRequestError('Student can not add more than 3 subjects');
+  const existingStudyPlans = await repository.findAllByStudentId(studentId);
+  if (existingStudyPlans.length + subjectIds.length > 3) {
+    throw new BadRequestError(
+      'Student cannot add more than 3 subjects in total'
+    );
   }
 
   const subjects = await subjectRepository.findAllByIds(subjectIds);
@@ -82,7 +85,74 @@ const store = async (props) => {
     }
   }
 
-  await repository.bulkUpsert(props);
+  await repository.bulkCreate(
+    studentId,
+    subjectIds,
+    {}
+  );
+};
+
+const update = async (props) => {
+  const dbTransaction = await sequelize.transaction();
+
+  try {
+    const { studentId, oldSubjectIds, newSubjectIds } = props;
+    await studentRepository.findById(studentId);
+
+    if (newSubjectIds.length > 3) {
+      throw new BadRequestError(
+        'Student cannot add more than 3 subjects in total'
+      );
+    }
+
+    const subjects = await subjectRepository.findAllByIds(newSubjectIds);
+    if (subjects.length !== newSubjectIds.length) {
+      throw new NotFoundError('One or more subjects not found!');
+    }
+
+    for (const subjectId of newSubjectIds) {
+      const isTaken = await repository.findAllBySubjectIdForUpdate(
+        props.studentId,
+        subjectId
+      );
+      if (isTaken.length >= 4) {
+        throw new BadRequestError(
+          `Subject with id ${subjectId} already taken by 4 students. Remove it from your study plan first!`
+        );
+      }
+    }
+
+    // Remove existing study plans
+    const existingStudyPlans = await repository.findAllByStudentIdAndSubjectIds(
+      studentId,
+      oldSubjectIds
+    );
+
+    if (existingStudyPlans.length !== oldSubjectIds.length) {
+      throw new NotFoundError('One or more subjects not found!');
+    }
+
+    await repository.bulkDelete(
+      existingStudyPlans.map((plan) => plan.id),
+      {
+        transaction: dbTransaction,
+      }
+    );
+
+    // Add new study plans
+    await repository.bulkCreate(
+      studentId,
+      newSubjectIds,
+      {
+        transaction: dbTransaction,
+      }
+    );
+
+    await dbTransaction.commit();
+  } catch (error) {
+    await dbTransaction.rollback();
+    throw error;
+  }
 };
 
 module.exports = {
@@ -91,4 +161,5 @@ module.exports = {
   findById,
   destroy,
   store,
+  update,
 };

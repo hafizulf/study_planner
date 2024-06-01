@@ -30,14 +30,42 @@ const createStudyPlanValidator = [
     .isArray({ min: 1 })
     .withMessage(`Subject id's must be a non-empty array`)
     .custom((array) => {
-      if (!array.every(Number.isInteger)) {
+      if (array && !array.every(Number.isInteger)) {
         throw new Error(`Subject id's array must contain only integers`);
       }
       return true;
     }),
 ];
 
-const updateStudyPlanValidator = createStudyPlanValidator;
+const updateStudyPlanValidator = [
+  param('studentId')
+    .notEmpty()
+    .withMessage('Student id is required')
+    .isInt()
+    .withMessage('Student id must be an integer'),
+  body('oldSubjectIds')
+    .notEmpty()
+    .withMessage(`Subject id's is required`)
+    .isArray({ min: 1 })
+    .withMessage(`Subject id's must be a non-empty array`)
+    .custom((array) => {
+      if (array && !array.every(Number.isInteger)) {
+        throw new Error(`Subject id's array must contain only integers`);
+      }
+      return true;
+    }),
+  body('newSubjectIds')
+    .notEmpty()
+    .withMessage(`Subject id's is required`)
+    .isArray({ min: 1 })
+    .withMessage(`Subject id's must be a non-empty array`)
+    .custom((array) => {
+      if (array && !array.every(Number.isInteger)) {
+        throw new Error(`Subject id's array must contain only integers`);
+      }
+      return true;
+    }),
+];
 
 module.exports = {
   getStudyPlanByStudentValidator,

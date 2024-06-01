@@ -2,6 +2,8 @@ const {
   StudyPlan,
   Subject,
   Student,
+  Sequelize,
+  sequelize,
 } = require('../models');
 const NotFoundError = require('../exceptions/NotFoundError');
 
@@ -67,25 +69,84 @@ const destroy = async (id) => {
   return studyPlan.destroy();
 };
 
-const findAllBySubjectId = async (id) => {
+const findAllBySubjectId = async (subject_id) => {
   const data = await StudyPlan.findAll({
     where: {
-      subject_id: id
-    }
+      subject_id,
+    },
   });
   return data;
-}
+};
 
-const bulkUpsert = async (props) => {
-  const { studentId, subjectIds } = props;
+const findAllBySubjectIdForUpdate = async (
+  studentId,
+  subject_id,
+) => {
+  const data = await StudyPlan.findAll({
+    where: {
+      subject_id,
+      student_id: {
+        [Sequelize.Op.ne]: studentId,
+      },
+    },
+  });
+  return data;
+};
 
-  const studyPlans = subjectIds.map((subjectId) => ({
-    studentId,
-    subjectId,
-  }));
+const findAllByStudentIdAndSubjectIds = async (
+  studentId,
+  subjectIds
+) => {
+  const data = await StudyPlan.findAll({
+    where: {
+      studentId,
+      subjectId: {
+        [Sequelize.Op.in]: subjectIds,
+      },
+    },
+  });
+  return data;
+};
 
-  for (const plan of studyPlans) {
-    await StudyPlan.upsert(plan);
+const bulkDelete = async (planIds, options) => {
+  await StudyPlan.destroy({
+    where: {
+      id: {
+        [Sequelize.Op.in]: planIds,
+      },
+    },
+    transaction: options.transaction,
+  });
+};
+
+const bulkCreate = async (
+  studentId,
+  subjectIds,
+  options = {},
+) => {
+  const { transaction } = options;
+  for (const subjectId of subjectIds) {
+    const [studyPlan, created] = await StudyPlan.findOrCreate({
+      where: {
+        student_id: studentId,
+        subject_id: subjectId,
+      },
+      defaults: {
+        student_id: studentId,
+        subject_id: subjectId,
+      },
+      ...(transaction && { transaction }),
+    });
+
+    if (!created) {
+      await studyPlan.update(
+        {
+          student_id: studentId,
+          subject_id: subjectId,
+        },
+        { transaction }
+      );
+    }
   }
 };
 
@@ -95,5 +156,8 @@ module.exports = {
   findById,
   destroy,
   findAllBySubjectId,
-  bulkUpsert,
+  findAllBySubjectIdForUpdate,
+  findAllByStudentIdAndSubjectIds,
+  bulkDelete,
+  bulkCreate,
 };

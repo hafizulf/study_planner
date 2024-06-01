@@ -55,10 +55,26 @@ const store = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const data = await service.update({
+      ...req.params,
+      ...req.body,
+    });
+    return res.status(200).json({
+      message: 'Study plan updated successfully',
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   findAll,
   findByStudentId,
   findById,
   destroy,
   store,
+  update,
 };
