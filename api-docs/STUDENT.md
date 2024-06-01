@@ -17,16 +17,19 @@ GET /
 **Response Example `200` `OK`:**
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Hafizul Furqan",
-    "created_at": "2024-06-01T15:34:44.555Z",
-    "updated_at": "2024-06-01T15:34:44.555Z",
-    "deleted_at": null,
-  },
-  ...
-]
+{
+  "message": "Students fetched successfully",
+  "data": [
+    {
+        "id": 2,
+        "name": "Hafizul",
+        "createdAt": "2024-05-31T08:44:33.000Z",
+        "updatedAt": "2024-05-31T08:45:52.000Z",
+        "deletedAt": null
+    },
+    ...
+  ]
+}
 ```
 
 ---
