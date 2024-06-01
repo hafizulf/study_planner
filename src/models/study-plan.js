@@ -58,6 +58,12 @@ module.exports = (sequelize, DataTypes) => {
       deletedAt: DataTypes.DATE,
     },
     {
+      indexes: [
+        {
+          unique: true,
+          fields: ['studentId', 'subjectId']
+        }
+      ],
       sequelize,
       modelName: 'StudyPlan',
       tableName: 'study_plans',
