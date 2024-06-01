@@ -56,3 +56,7 @@ The Student Study Plans project is a system designed to help students organize a
    npm run dev
    ```
    - The server will run on your localhost at the specified `PORT` in the `.env` file.
+
+## API Documentation
+
+Check out the [API Documentation](api-docs/README.md) for more details.
