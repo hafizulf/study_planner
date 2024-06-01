@@ -24,9 +24,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/students', studentsRouter);
-app.use('/subjects', subjectsRouter);
-app.use('/study-plans', studyPlansRouter);
+app.use('/api/students', studentsRouter);
+app.use('/api/subjects', subjectsRouter);
+app.use('/api/study-plans', studyPlansRouter);
 
 app.use(errorHandler);
 
