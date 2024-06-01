@@ -10,7 +10,7 @@ const findAll = async (req, res) => {
 
 const findById = async (req, res, next) => {
   try {
-    const data = await service.findById(req.params.id);
+    const data = await service.findAllById(req.params.studentId);
     return res.status(200).json({
       message: 'Study plan fetched successfully',
       data,

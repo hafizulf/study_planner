@@ -23,8 +23,11 @@ const findAll = async () => {
   return data;
 };
 
-const findById = async (id) => {
-  const data = await StudyPlan.findByPk(id, {
+const findById = async (studentId) => {
+  const data = await StudyPlan.findAll({
+    where: {
+      studentId,
+    },
     include: [
       {
         model: Subject,
@@ -37,7 +40,7 @@ const findById = async (id) => {
         attributes: ['id', 'name'],
       },
     ],
-  })
+  });
 
   if (!data) {
     throw new NotFoundError('Study plan not found!');

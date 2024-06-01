@@ -32,16 +32,21 @@ const findAll = async () => {
   return response;
 };
 
-const findById = async (id) => {
-  const result = await repository.findById(id);
+const findAllById = async (studentId) => {
+  const result = await repository.findById(studentId);
+
+  if(result.length === 0) {
+    throw new NotFoundError('Study plan not found!');
+  }
 
   return {
-    id: result.id,
-    studentId: result.studentId,
-    studentName: result.student.name,
-    subjectId: result.subjectId,
-    subjectName: result.subject.name,
-  };
+    studentId: result[0].studentId,
+    name: result[0].student.name,
+    subjects: result.map((item) => ({
+      id: item.subject.id,
+      name: item.subject.name,
+    })),
+  }
 };
 
 const destroy = async (id) => {
@@ -77,7 +82,7 @@ const store = async (props) => {
 
 module.exports = {
   findAll,
-  findById,
+  findAllById,
   destroy,
   store,
 };

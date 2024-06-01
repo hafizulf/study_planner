@@ -1,11 +1,11 @@
 const { body, param } = require('express-validator');
 
 const getStudyPlanValidator = [
-  param('id')
+  param('studentId')
     .notEmpty()
-    .withMessage('Id is required')
+    .withMessage('Student id is required')
     .isInt()
-    .withMessage('Id must be an integer'),
+    .withMessage('Student id must be an integer'),
 ];
 
 const deleteStudyPlanValidator = getStudyPlanValidator;

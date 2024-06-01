@@ -10,7 +10,7 @@ const { createStudyPlanValidator } = require('../validators/study-plan.validatio
 
 router
   .get('/', controller.findAll)
-  .get('/:id', getStudyPlanValidator, validate, controller.findById)
+  .get('/:studentId', getStudyPlanValidator, validate, controller.findById)
   .delete('/:id', deleteStudyPlanValidator, validate, controller.destroy)
   .post('/', createStudyPlanValidator, validate, controller.store)
 
